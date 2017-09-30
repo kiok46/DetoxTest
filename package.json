@@ -1,0 +1,44 @@
+{
+  "name": "DetoxTest",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+	"detox-server": "detox run-server",
+	"test": "jest __tests__ --setupTestFrameworkScriptFile=./jest/setup-unit-tests.js",
+    "test-e2e": "jest __e2e__ --setupTestFrameworkScriptFile=./jest/setup-e2e-tests.js --bail"
+  },
+  "dependencies": {
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.47.0"
+  },
+  "devDependencies": {
+    "babel-jest": "21.2.0",
+    "babel-preset-react-native": "4.0.0",
+    "detox": "^5.8.1",
+    "jest": "21.2.1",
+    "react-test-renderer": "16.0.0-alpha.12"
+  },
+  "jest": {
+    "preset": "react-native",
+	"transformIgnorePatterns": [
+      "node_modules/(?!react-native|tcomb-form-native|react-navigation)"
+    ]
+  },
+  "detox": {
+	 "specs": "e2e",
+		"__session": {
+			"server": "ws://localhost:8099",
+			"sessionId": "test"
+     },
+	 "configurations": {
+		 "android.emu.debug": {
+		  "binaryPath": "android/app/build/outputs/apk/app-debug.apk",
+		  "build": "pushd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && popd",
+		  "type": "android.emulator",
+		  "name": "Nexus_5X_API_22",
+		  "reuse": true
+	  }
+	 }
+  }
+}
