@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-	"detox-server": "detox run-server",
-	"test": "jest __tests__ --setupTestFrameworkScriptFile=./jest/setup-unit-tests.js",
-    "test-e2e": "jest __e2e__ --setupTestFrameworkScriptFile=./jest/setup-e2e-tests.js --bail"
+    "test-e2e": "jest __e2e__"
   },
   "dependencies": {
     "react": "16.0.0-alpha.12",
@@ -21,24 +19,27 @@
   },
   "jest": {
     "preset": "react-native",
+	"bail": true,
+	"setupTestFrameworkScriptFile": "<rootDir>/jest/setup-e2e-tests.js",
 	"transformIgnorePatterns": [
       "node_modules/(?!react-native|tcomb-form-native|react-navigation)"
     ]
   },
   "detox": {
-	 "specs": "e2e",
-		"__session": {
-			"server": "ws://localhost:8099",
-			"sessionId": "test"
-     },
 	 "configurations": {
+		 "ios.sim.debug": {
+		   "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/DetoxTest.app",
+		   "build": "set -o pipefail && xcodebuild -project ios/DetoxTest.xcodeproj -scheme DetoxTest -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+		   "type": "ios.simulator",
+		   "name": "iPhone 6"
+		 },
 		 "android.emu.debug": {
-		  "binaryPath": "android/app/build/outputs/apk/app-debug.apk",
-		  "build": "pushd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && popd",
-		  "type": "android.emulator",
-		  "name": "Nexus_5X_API_22",
-		  "reuse": true
-	  }
+		    "binaryPath": "android/app/build/outputs/apk/app-debug.apk",
+		    "build": "pushd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && popd",
+		    "type": "android.emulator",
+		    "name": "Nexus_5X_API_22",
+		    "reuse": true
+	     }
 	 }
   }
 }
